@@ -49,7 +49,7 @@ module "aws_vpc" {
   aws_region         = var.aws_region
   aws_az_name        = format("%s%s", var.aws_region, var.aws_az)
   aws_vpc_name       = format("%s-%s-vpc-%s", var.project_prefix, var.aws_eks_cluster_name, var.project_suffix)
-  aws_vpc_cidr_block = "172.16.192.0/21"
+  aws_vpc_cidr_block = "172.16.40.0/21"
   custom_tags        = {
     f5xc-tenant  = "playground"
     f5xc-feature = "aws-eks"
