@@ -116,6 +116,9 @@ module "aws_eks" {
   aws_vpc_zone_identifier     = [for s in module.aws_subnet.aws_subnets : s["id"]]
   aws_endpoint_public_access  = true
   aws_endpoint_private_access = true
+  providers                   = {
+    aws = aws.default
+  }
 }
 
 output "kubeconfig" {
