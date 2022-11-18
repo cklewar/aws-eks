@@ -163,6 +163,8 @@ jobs:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
           TF_VAR_f5xc_tenant: ${{ secrets.F5XC_TENANT }}
           TF_VAR_ssh_public_key_file: ${{ secrets.SSH_PUBLIC_KEY_FILE }}
+          TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: terraform apply -auto-approve -no-color
         continue-on-error: false
       - name: Cleanup environment
@@ -222,6 +224,8 @@ jobs:
           TF_TOKEN_app_terraform_io: ${{ secrets.TF_TOKEN_APP_TERRAFORM_IO }}
           TF_VAR_f5xc_tenant: ${{ secrets.F5XC_TENANT }}
           TF_VAR_ssh_public_key_file: ${{ secrets.SSH_PUBLIC_KEY_FILE }}
+          TF_VAR_aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          TF_VAR_aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: terraform destroy -auto-approve -no-color
         continue-on-error: false
       - name: Cleanup environment
