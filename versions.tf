@@ -1,5 +1,13 @@
 terraform {
   required_version = ">= 1.3.0"
+   cloud {
+    organization = "cklewar"
+    hostname     = "app.terraform.io"
+
+    workspaces {
+      name = "aws-subnets-module"
+    }
+  }
 
   required_providers {
     aws = {
