@@ -38,9 +38,20 @@ variable "aws_secret_access_key" {
   type = string
 }
 
+variable "f5xc_tenant" {
+  type    = string
+}
+
 variable "owner" {
   type    = string
   default = "c.klewar@f5.com"
+}
+
+locals {
+  custom_tags = {
+    f5xc-tenant  = var.f5xc_tenant
+    f5xc-feature = "aws-eks"
+  }
 }
 
 provider "aws" {
@@ -54,12 +65,9 @@ module "aws_vpc" {
   aws_region         = var.aws_region
   aws_az_name        = format("%s%s", var.aws_region, var.aws_az_a)
   aws_vpc_name       = format("%s-%s-vpc-%s", var.project_prefix, var.aws_eks_cluster_name, var.project_suffix)
-  aws_vpc_cidr_block = "172.16.40.0/21"
-  custom_tags        = {
-    f5xc-tenant  = "playground"
-    f5xc-feature = "aws-eks"
-  }
-  providers = {
+  aws_vpc_cidr_block = "172.16.176.0/21"
+  custom_tags        = local.custom_tags
+  providers          = {
     aws = aws.default
   }
 }
@@ -72,23 +80,17 @@ module "aws_subnet" {
       name                    = format("%s-aws-eks-subnet-a-%s", var.project_prefix, var.project_suffix)
       owner                   = var.owner
       map_public_ip_on_launch = true
-      cidr_block              = "172.16.40.0/24"
+      cidr_block              = "172.16.176.0/24"
       availability_zone       = format("%s%s", var.aws_region, var.aws_az_a)
-      custom_tags             = {
-        f5xc-tenant  = "playground"
-        f5xc-feature = "aws-eks"
-      }
+      custom_tags             = local.custom_tags
     },
     {
       name                    = format("%s-aws-eks-subnet-b-%s", var.project_prefix, var.project_suffix)
       owner                   = var.owner
       map_public_ip_on_launch = true
-      cidr_block              = "172.16.41.0/24"
+      cidr_block              = "172.16.177.0/24"
       availability_zone       = format("%s%s", var.aws_region, var.aws_az_b)
-      custom_tags             = {
-        f5xc-tenant  = "playground"
-        f5xc-feature = "aws-eks"
-      }
+      custom_tags             = local.custom_tags
     }
   ]
   providers = {
