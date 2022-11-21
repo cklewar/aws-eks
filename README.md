@@ -54,15 +54,14 @@ module "aws_vpc" {
   aws_region         = var.aws_region
   aws_az_name        = format("%s%s", var.aws_region, var.aws_az)
   aws_vpc_name       = format("%s-%s-vpc-%s", var.project_prefix, var.aws_eks_cluster_name, var.project_suffix)
-  aws_vpc_cidr_block = "172.16.192.0/21"
+  aws_vpc_cidr_block = "172.16.40.0/21"
   custom_tags        = {
-    Name = format("%s-%s-vpc-%s", var.project_prefix, var.aws_eks_cluster_name, var.project_suffix)
+    f5xc-tenant  = "playground"
+    f5xc-feature = "aws-eks"
   }
-}
-
-provider "aws" {
-  region = "us-west-2"
-  alias  = "default"
+  providers = {
+    aws = aws.default
+  }
 }
 
 module "aws_subnet" {
@@ -108,27 +107,5 @@ output "aws_subnets" {
       "vpc_id" = module.aws_subnet.aws_subnets[format("%s-aws-eks-subnet-b-%s", var.project_prefix, var.project_suffix)]["vpc_id"]
     }
   }
-}
-
-module "aws_eks" {
-  source                      = "./modules/aws/eks"
-  iam_owner                   = var.owner
-  aws_region                  = "us-west-2"
-  aws_vpc_id                  = module.aws_vpc.aws_vpc["id"]
-  aws_access_key              = abc
-  aws_secret_key              = xyz
-  aws_subnet_ids              = [for s in module.aws_subnet.aws_subnets : s["id"]]
-  aws_eks_cluster_name        = var.aws_eks_cluster_name
-  aws_vpc_zone_identifier     = [for s in module.aws_subnet.aws_subnets : s["id"]]
-  aws_endpoint_public_access  = true
-  aws_endpoint_private_access = true
-}
-
-output "kubeconfig" {
-  value = module.aws_eks.aws_eks["kubeconfig"]
-}
-
-output "config_map_aws_auth" {
-  value = module.aws_eks.aws_eks["config_map_aws_auth"]
 }
 ```
