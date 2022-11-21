@@ -20,9 +20,14 @@ variable "aws_region" {
   default = "us-west-2"
 }
 
-variable "aws_az" {
+variable "aws_az_a" {
   type    = string
   default = "a"
+}
+
+variable "aws_az_b" {
+  type    = string
+  default = "b"
 }
 
 variable "aws_access_key_id" {
@@ -47,7 +52,7 @@ module "aws_vpc" {
   source             = "./modules/aws/vpc"
   aws_owner          = var.owner
   aws_region         = var.aws_region
-  aws_az_name        = format("%s%s", var.aws_region, var.aws_az)
+  aws_az_name        = format("%s%s", var.aws_region, var.aws_az_a)
   aws_vpc_name       = format("%s-%s-vpc-%s", var.project_prefix, var.aws_eks_cluster_name, var.project_suffix)
   aws_vpc_cidr_block = "172.16.40.0/21"
   custom_tags        = {
@@ -68,7 +73,7 @@ module "aws_subnet" {
       owner                   = var.owner
       map_public_ip_on_launch = true
       cidr_block              = "172.16.40.0/24"
-      availability_zone       = format("%s%s", var.aws_region, var.aws_az)
+      availability_zone       = format("%s%s", var.aws_region, var.aws_az_a)
       custom_tags             = {
         f5xc-tenant  = "playground"
         f5xc-feature = "aws-eks"
@@ -79,7 +84,7 @@ module "aws_subnet" {
       owner                   = var.owner
       map_public_ip_on_launch = true
       cidr_block              = "172.16.41.0/24"
-      availability_zone       = format("%s%s", var.aws_region, var.aws_az)
+      availability_zone       = format("%s%s", var.aws_region, var.aws_az_b)
       custom_tags             = {
         f5xc-tenant  = "playground"
         f5xc-feature = "aws-eks"
