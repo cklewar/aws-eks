@@ -37,3 +37,15 @@ variable "owner" {
   type    = string
   default = "c.klewar@f5.com"
 }
+
+locals {
+  custom_tags = {
+    f5xc-tenant  = "playground"
+    f5xc-feature = "aws-eks"
+  }
+}
+
+provider "aws" {
+  region = "us-west-2"
+  alias  = "default"
+}

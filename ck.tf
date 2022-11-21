@@ -1,8 +1,3 @@
-provider "aws" {
-  region = "us-west-2"
-  alias  = "default"
-}
-
 module "aws_vpc" {
   source             = "./modules/aws/vpc"
   aws_owner          = var.owner
@@ -10,11 +5,8 @@ module "aws_vpc" {
   aws_az_name        = format("%s%s", var.aws_region, var.aws_az)
   aws_vpc_name       = format("%s-%s-vpc-%s", var.project_prefix, var.aws_eks_cluster_name, var.project_suffix)
   aws_vpc_cidr_block = "172.16.40.0/21"
-  custom_tags        = {
-    f5xc-tenant  = "playground"
-    f5xc-feature = "aws-eks"
-  }
-  providers = {
+  custom_tags        = local.custom_tags
+  providers          = {
     aws = aws.default
   }
 }
@@ -29,10 +21,7 @@ module "aws_subnet" {
       map_public_ip_on_launch = true
       cidr_block              = "172.16.40.0/24"
       availability_zone       = format("%s%s", var.aws_region, var.aws_az)
-      custom_tags             = {
-        f5xc-tenant  = "playground"
-        f5xc-feature = "aws-eks"
-      }
+      custom_tags             = local.custom_tags
     },
     {
       name                    = format("%s-aws-eks-subnet-b-%s", var.project_prefix, var.project_suffix)
@@ -40,10 +29,7 @@ module "aws_subnet" {
       map_public_ip_on_launch = true
       cidr_block              = "172.16.41.0/24"
       availability_zone       = format("%s%s", var.aws_region, var.aws_az)
-      custom_tags             = {
-        f5xc-tenant  = "playground"
-        f5xc-feature = "aws-eks"
-      }
+      custom_tags             = local.custom_tags
     }
   ]
   providers = {
