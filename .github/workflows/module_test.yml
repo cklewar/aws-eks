@@ -10,7 +10,6 @@ jobs:
       - name: Check out repository and submodules
         uses: actions/checkout@v3
         with:
-          ref: latest
           fetch-depth: 0
           submodules: recursive
       - name: Checkout support repo
